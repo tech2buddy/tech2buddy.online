@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --vh: 1vh;
+  }
+
+  html, body {
+    /* Prevent horizontal scrolling and "bounce" on mobile */
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+    /* Use dynamic viewport height for mobile browsers */
+    height: 100%;
+    height: -webkit-fill-available;
+    /* Smooth out text for high-res iPhone screens */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Stop iOS Safari from auto-zooming text in landscape */
+    -webkit-text-size-adjust: 100%;
+    /* Remove the gray tap box on buttons */
+    -webkit-tap-highlight-color: transparent;
+    background-color: #0A0A0B;
+  }
+
+  #root {
+    min-height: 100vh;
+    /* Fallback for older iPhones, uses the dynamic height fix */
+    min-height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Custom Scrollbar Logic */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fix for iPhone 'Notch' areas (Safe Area Insets) */
+.safe-p-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-p-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
