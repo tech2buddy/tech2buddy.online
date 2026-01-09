@@ -8,45 +8,72 @@
   }
 
   html, body {
-    /* Prevent horizontal scrolling and "bounce" on mobile */
+    /* Prevent horizontal "rubber-band" bouncing on iPhones */
     max-width: 100vw;
     overflow-x: hidden;
     position: relative;
-    /* Use dynamic viewport height for mobile browsers */
+    
+    /* Ensure height accounts for the iPhone Safari address bar */
     height: 100%;
     height: -webkit-fill-available;
-    /* Smooth out text for high-res iPhone screens */
+    
+    /* Font smoothing for high-end mobile screens */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Stop iOS Safari from auto-zooming text in landscape */
+    
+    /* CRITICAL: Prevents iPhone from auto-scaling text sizes when switching views */
     -webkit-text-size-adjust: 100%;
-    /* Remove the gray tap box on buttons */
+    text-size-adjust: 100%;
+    
+    /* Removes the gray selection box when tapping elements on iOS */
     -webkit-tap-highlight-color: transparent;
     background-color: #0A0A0B;
+    margin: 0;
+    padding: 0;
   }
 
   #root {
+    /* Use dynamic height fix to keep the layout from shifting */
     min-height: 100vh;
-    /* Fallback for older iPhones, uses the dynamic height fix */
     min-height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  /* Force the layout to treat mobile as a small canvas */
+  main {
+    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
   }
 }
 
-/* Custom Scrollbar Logic */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+@layer components {
+  /* Utility to hide scrollbars while keeping content scrollable */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Safe area paddings for the iPhone Notch and Home Indicator */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
 }
 
-/* Fix for iPhone 'Notch' areas (Safe Area Insets) */
-.safe-p-top {
-  padding-top: env(safe-area-inset-top);
-}
-.safe-p-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+/* FIX: Prevent elements from collapsing. 
+  By defining a minimum width, we force the mobile browser to 
+  treat the page as a wider layout that scales down.
+*/
+.desktop-mirror-container {
+  min-width: 375px; /* Minimum width of an iPhone */
+  width: 100%;
 }
